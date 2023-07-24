@@ -81,7 +81,7 @@ func (c *Client) CreateChatCompletionPro(
 
 	urlSuffix := chatCompletionsProSuffix
 
-	req, err := c.newRequest(ctx, http.MethodPost, c.fullUrl(urlSuffix, request.Model), withBody(request))
+	req, err := c.newRequest(ctx, http.MethodPost, c.fullUrl(urlSuffix), withBody(request))
 	if err != nil {
 		return
 	}

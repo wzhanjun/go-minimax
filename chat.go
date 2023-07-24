@@ -106,7 +106,7 @@ func (c *Client) CreateChatCompletion(
 
 	urlSuffix := chatCompletionsSuffix
 
-	req, err := c.newRequest(ctx, http.MethodPost, c.fullUrl(urlSuffix, request.Model), withBody(request))
+	req, err := c.newRequest(ctx, http.MethodPost, c.fullUrl(urlSuffix), withBody(request))
 	if err != nil {
 		return
 	}

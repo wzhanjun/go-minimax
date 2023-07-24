@@ -30,7 +30,7 @@ func (c *Client) CreateChatCompletionProStream(
 	urlSuffix := chatCompletionsProSuffix
 
 	request.Stream = true
-	req, err := c.newRequest(ctx, http.MethodPost, c.fullUrl(urlSuffix, request.Model), withBody(request))
+	req, err := c.newRequest(ctx, http.MethodPost, c.fullUrl(urlSuffix), withBody(request))
 	if err != nil {
 		return nil, err
 	}

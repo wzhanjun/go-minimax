@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"os"
 
 	"github.com/wzhanjun/go-minimax"
 )
@@ -17,7 +18,9 @@ func main() {
 	// chatcompletion()
 	// chatcompletionstream()
 	// chatcompletionpro()
-	chatcompletionprostream()
+	// chatcompletionprostream()
+	textToSpeech()
+
 }
 
 func chatcompletion() {
@@ -132,4 +135,31 @@ func chatcompletionprostream() {
 		}
 		fmt.Printf("%#v\n", resp)
 	}
+}
+
+func textToSpeech() {
+	resp, err := client.TextToSpeech(context.Background(), minimax.TextToSpeechRequest{
+		Model:   minimax.MiniMaxSpeech01,
+		VoiceId: "male-qn-qingse",
+		Text:    "在一个宁静的小镇，有一座古老的豪宅，据说每到夜晚，豪宅内都会传来神秘的低语和异样的声音。当地居民都对这座豪宅敬而远之，因为传说这里隐藏着一个可怕的存在。",
+	})
+	if err != nil {
+		fmt.Printf("text to audio failed, err:%+v", err)
+		return
+	}
+
+	file, err := os.Create("audio.mp3")
+	if err != nil {
+		fmt.Println("创建文件失败:", err)
+		return
+	}
+	defer file.Close()
+
+	_, err = io.Copy(file, resp)
+	if err != nil {
+		fmt.Println("写入文件失败:", err)
+		return
+	}
+
+	fmt.Printf("%+v, %+v \n", resp, err)
 }
