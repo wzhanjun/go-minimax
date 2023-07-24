@@ -6,10 +6,12 @@ import (
 	"net/http"
 )
 
-// Chat message role defined by the OpenAI API.
+type SenderType string
+
 const (
-	SenderTypeUser = "USER"
-	SenderTypeBot  = "BOT"
+	SenderTypeBot      SenderType = "BOT"
+	SenderTypeUser     SenderType = "USER"
+	SenderTypeFunction SenderType = "FUNCTION"
 )
 
 type FinishReason string
@@ -21,6 +23,18 @@ const (
 	FinishReasonFunctionCall  FinishReason = "function_call"
 	FinishReasonContentFilter FinishReason = "content_filter"
 	FinishReasonNull          FinishReason = "null"
+)
+
+type SensitiveType int64
+
+const (
+	SensitiveTypeSerious     = 1 // 严重违规
+	SensitiveTypePron        = 2 // 色情
+	SensitiveTypeAdvertising = 3 // 广告
+	SensitiveTypeProhibited  = 4 // 违禁
+	SensitiveTypeAbuse       = 5 // 谩骂
+	SensitiveTypeTerrorism   = 6 // 暴恐
+	SensitiveTypeOthers      = 7 // 其他
 )
 
 const chatCompletionsSuffix = "/text/chatcompletion"
@@ -36,9 +50,9 @@ type ChatCompletionRequest struct {
 	Stream           bool      `json:"stream,omitempty"`
 	SSE              bool      `json:"use_standard_sse,omitempty"`
 	Messages         []Message `json:"messages"`
-	Temperature      float64   `json:"temperature,omitempty"`
+	Temperature      float32   `json:"temperature,omitempty"`
 	TokensToGenerate int       `json:"tokens_to_generate"`
-	TopP             float64   `json:"top_p,omitempty"`
+	TopP             float32   `json:"top_p,omitempty"`
 	SkipInfoMask     bool      `json:"skip_info_mask,omitempty"`
 }
 
@@ -48,8 +62,9 @@ type RoleMeta struct {
 }
 
 type Message struct {
-	SenderType string `json:"sender_type"`
-	Text       string `json:"text"`
+	SenderType SenderType `json:"sender_type"`
+	SenderName string     `json:"sender_name,omitempty"`
+	Text       string     `json:"text"`
 }
 
 type ChatCompletionResponse struct {
@@ -70,17 +85,14 @@ type Choice struct {
 	FinishReason FinishReason `json:"finish_reason,omitempty"`
 }
 
-type ChoiceDelta struct {
-	Choices []Choice `json:"choices"`
-}
-
 type ChatCompletionBaseResp struct {
 	StatusCode int    `json:"status_code"`
 	StatusMsg  string `json:"status_msg"`
 }
 
 type Usage struct {
-	TotalTokens int `json:"total_tokens"`
+	TotalTokens           int `json:"total_tokens"`
+	TokensWithAddedPlugin int `json:"tokens_with_added_plugin,omitempty"`
 }
 
 func (c *Client) CreateChatCompletion(

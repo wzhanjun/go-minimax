@@ -15,7 +15,9 @@ var client = minimax.NewClient(token, orgId)
 
 func main() {
 	// chatcompletion()
-	chatcompletionstream()
+	// chatcompletionstream()
+	// chatcompletionpro()
+	chatcompletionprostream()
 }
 
 func chatcompletion() {
@@ -53,6 +55,70 @@ func chatcompletionstream() {
 			UserName: "user",
 			BotName:  "ai",
 		},
+	})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	for {
+		resp, err := stream.Recv()
+		if errors.Is(err, io.EOF) {
+			break
+		}
+		fmt.Printf("%#v\n", resp)
+	}
+}
+
+func chatcompletionpro() {
+	resp, err := client.CreateChatCompletionPro(context.Background(), minimax.ChatCompletionProRequest{
+		Model:            minimax.MiniMaxChat55,
+		TokensToGenerate: 512,
+		Messages: []minimax.Message{
+			{
+				SenderType: minimax.SenderTypeUser,
+				SenderName: "张三",
+				Text:       "今天深圳的天气怎么样",
+			},
+		},
+		BotSetting: []minimax.BotSetting{
+			{
+				BotName: "AI",
+				Content: "智能机器人",
+			},
+		},
+		ReplyConstraints: minimax.ReplyConstraints{
+			SenderType: minimax.SenderTypeBot,
+			SenderName: "AI",
+		},
+		Plugins: []minimax.PluginName{minimax.PluginNameWebSearch},
+	})
+
+	fmt.Printf("%+v, %+v \n", resp, err)
+}
+
+func chatcompletionprostream() {
+	stream, err := client.CreateChatCompletionProStream(context.Background(), minimax.ChatCompletionProRequest{
+		Model:            minimax.MiniMaxChat55,
+		TokensToGenerate: 512,
+		Messages: []minimax.Message{
+			{
+				SenderType: minimax.SenderTypeUser,
+				SenderName: "张三",
+				Text:       "今天深圳的天气怎么样",
+			},
+		},
+		BotSetting: []minimax.BotSetting{
+			{
+				BotName: "AI",
+				Content: "智能机器人",
+			},
+		},
+		ReplyConstraints: minimax.ReplyConstraints{
+			SenderType: minimax.SenderTypeBot,
+			SenderName: "AI",
+		},
+		Plugins: []minimax.PluginName{minimax.PluginNameWebSearch},
 	})
 	if err != nil {
 		fmt.Println(err)
