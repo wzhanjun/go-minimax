@@ -11,6 +11,17 @@ import (
 	utils "github.com/wzhanjun/go-minimax/internal"
 )
 
+const (
+	StatusCodeUnKnown                = 1000
+	StatusCodeTimeout                = 1001
+	StatusCodeTriggerLimit           = 1002
+	StatusCodeAuthFailed             = 1004
+	StatusCodeInsufficientBalance    = 1008
+	StatusCodeServerInternalError    = 1013
+	StatusCodeOutputSeriousViolation = 1027
+	StatusCodeInputFormatAbnormal    = 2013
+)
+
 type Client struct {
 	config         ClientConfig
 	requestBuilder utils.RequestBuilder
