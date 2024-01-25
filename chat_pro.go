@@ -19,7 +19,7 @@ type ChatCompletionProRequest struct {
 	TokensToGenerate  int              `json:"tokens_to_generate"`
 	Temperature       float32          `json:"temperature,omitempty"`
 	TopP              float32          `json:"top_p,omitempty"`
-	MaskSensitiveInfo bool             `json:"mask_sensitive_info,omitempty"`
+	MaskSensitiveInfo bool             `json:"mask_sensitive_info"`
 	Messages          []Message        `json:"messages"`
 	BotSetting        []BotSetting     `json:"bot_setting"`
 	ReplyConstraints  ReplyConstraints `json:"reply_constraints"`
