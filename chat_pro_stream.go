@@ -6,17 +6,17 @@ import (
 )
 
 type ChatCompletionProStreamResponse struct {
-	ID                  string                 `json:"id"`
-	Created             int64                  `json:"created"`
-	Model               string                 `json:"model"`
-	Reply               string                 `json:"reply"`
-	InputSensitive      bool                   `json:"input_sensitive,omitempty"`
-	InputSensitiveType  SensitiveType          `json:"input_sensitive_type,omitempty"`
-	OutputSensitive     bool                   `json:"output_sensitive,omitempty"`
-	OutputSensitiveType SensitiveType          `json:"output_sensitive_type,omitempty"`
-	Choices             []ChoicePro            `json:"choices"`
-	Usage               Usage                  `json:"usage,omitempty"`
-	BaseResp            ChatCompletionBaseResp `json:"base_resp,omitempty"`
+	CommonResponse
+	ID                  string        `json:"id"`
+	Created             int64         `json:"created"`
+	Model               string        `json:"model"`
+	Reply               string        `json:"reply"`
+	InputSensitive      bool          `json:"input_sensitive,omitempty"`
+	InputSensitiveType  SensitiveType `json:"input_sensitive_type,omitempty"`
+	OutputSensitive     bool          `json:"output_sensitive,omitempty"`
+	OutputSensitiveType SensitiveType `json:"output_sensitive_type,omitempty"`
+	Choices             []ChoicePro   `json:"choices"`
+	Usage               Usage         `json:"usage,omitempty"`
 }
 
 type ChatCompletionProStream struct {
