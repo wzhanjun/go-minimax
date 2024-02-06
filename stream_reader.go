@@ -16,7 +16,7 @@ var (
 )
 
 type streamable interface {
-	ChatCompletionStreamResponse | ChatCompletionProStreamResponse
+	ChatCompletionStreamResponse | ChatCompletionProStreamResponse | T2AStreamResponse
 }
 
 type streamReader[T streamable] struct {

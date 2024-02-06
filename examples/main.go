@@ -15,13 +15,13 @@ var orgId = os.Getenv("ENV_MINIMAX_ORG_ID")
 var client = minimax.NewClient(token, orgId)
 
 func main() {
-	chatcompletion()
+	// chatcompletion()
 	// chatcompletionstream()
 	// chatcompletionpro()
 	// chatcompletionprostream()
 	// textToSpeech()
 	// t2APro()
-
+	t2aStream()
 }
 
 func chatcompletion() {
@@ -177,4 +177,24 @@ func t2APro() {
 	}
 
 	fmt.Printf("%+v, %+v \n", resp, err)
+}
+
+func t2aStream() {
+	stream, err := client.T2AStream(context.Background(), minimax.TextToSpeechRequest{
+		Model:   minimax.MiniMaxSpeech01,
+		VoiceId: "male-qn-qingse",
+		Text:    "在一个宁静的小镇，有一座古老的豪宅，据说每到夜晚，豪宅内都会传来神秘的低语和异样的声音。当地居民都对这座豪宅敬而远之，因为传说这里隐藏着一个可怕的存在。",
+	})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	for {
+		resp, err := stream.Recv()
+		if errors.Is(err, io.EOF) {
+			break
+		}
+		fmt.Printf("%#v\n", resp)
+	}
 }
